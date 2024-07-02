@@ -7,6 +7,9 @@ Game::Game()
 
 	mPaddlePos.x = 50;
 	mPaddlePos.y = 768/2;
+	
+	mPaddle2Pos.x = 1024-100;
+	mPaddle2Pos.y = 768/2;
 
 	mBallPos.x = 1024/2;
 	mBallPos.y = 768/2;
@@ -106,6 +109,18 @@ void Game::ProcessInput()
 	{
 		mPaddleDir += 1;
 	}
+
+	//Paddle2 directions
+	mPaddle2Dir = 0;
+
+	if (state[SDL_SCANCODE_I])
+	{
+		mPaddle2Dir -= 1;
+	}
+	if (state[SDL_SCANCODE_K])
+	{
+		mPaddle2Dir += 1;
+	}
 }
 
 void Game::UpdateGame()
@@ -125,7 +140,6 @@ void Game::UpdateGame()
 	//update tick counts (for next frame
 	mTicksCount = SDL_GetTicks();
 
-	//TODO: Update objects in game world as function of delta time
 
 	// update the y position of the paddle based on
 	// the paddle direction, a speed of 300.0f pixels / second
@@ -141,6 +155,21 @@ void Game::UpdateGame()
 		else if (mPaddlePos.y > (768.0f*2 - paddleH - thickness))
 		{
 			mPaddlePos.y = (768.0f * 2 - paddleH - thickness);
+		}
+	}
+	//paddle2
+	if (mPaddle2Dir != 0)
+	{
+		mPaddle2Pos.y += mPaddle2Dir * 300.0f * deltaTime;
+
+		//making sure paddle doesnt move off screen
+		if (mPaddle2Pos.y < (paddleH / 2.0f + thickness))
+		{
+			mPaddle2Pos.y = (paddleH / 2.0f + thickness);
+		}
+		else if (mPaddle2Pos.y > (768.0f * 2 - paddleH - thickness))
+		{
+			mPaddle2Pos.y = (768.0f * 2 - paddleH - thickness);
 		}
 	}
 
@@ -162,14 +191,21 @@ void Game::UpdateGame()
 	{
 		mBallVel.y *= -1;
 	}
-	//right wall
-	else if (mBallPos.x >= 1024 - thickness && mBallVel.x > 0.0f)
-	{
-		mBallVel.x *= -1;
-	}
+	////right wall
+	//else if (mBallPos.x >= 1024 - thickness && mBallVel.x > 0.0f)
+	//{
+	//	mBallVel.x *= -1;
+	//}
 
+	//paddle
 	float diff = mBallPos.y - mPaddlePos.y;
 	if (diff <= paddleH / 2.0f && mBallPos.x <= 75.0f && mBallPos.x >= 20.0f && mBallVel.x < 0.0f)
+	{
+		mBallVel.x *= -1.0f;
+	}
+	//paddle2
+	float diff2 = mPaddle2Pos.y - mBallPos.y;
+	if (diff2 <= paddleH / 2.0f && mBallPos.x > 924.0f && mBallVel.x > 0.0f)
 	{
 		mBallVel.x *= -1.0f;
 	}
@@ -200,6 +236,10 @@ void Game::GenerateOutput()
 	};
 	SDL_RenderFillRect(mRenderer, &mPaddle);
 
+	//draw right paddle
+	SDL_Rect mPaddle2{ mPaddle2Pos.x,mPaddle2Pos.y / 2,thickness,paddleH };
+	SDL_RenderFillRect(mRenderer, &mPaddle2);
+
 	//draw top wall
 	SDL_Rect wall{
 		0,0,1024,thickness
@@ -211,11 +251,11 @@ void Game::GenerateOutput()
 	SDL_RenderFillRect(mRenderer, &wall);
 
 	//draw right wall
-	wall.x = 1024 - thickness;
+	/*wall.x = 1024 - thickness;
 	wall.y = 0;
 	wall.w = thickness;
 	wall.h = 1024;
-	SDL_RenderFillRect(mRenderer, &wall);
+	SDL_RenderFillRect(mRenderer, &wall);*/
 
 	//swap colorbuffers
 	SDL_RenderPresent(mRenderer);

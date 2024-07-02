@@ -26,6 +26,7 @@ private:
 		float y;
 	};
 	Vector2 mPaddlePos;
+	Vector2 mPaddle2Pos;
 	Vector2 mBallPos;
 	Vector2 mBallVel;
 	int thickness = 15;
@@ -33,6 +34,7 @@ private:
 
 	//paddle direction
 	int mPaddleDir;
+	int mPaddle2Dir;
 
 	//paddle height
 	int paddleH;

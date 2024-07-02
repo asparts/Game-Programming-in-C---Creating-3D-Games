@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL.h>
+#include <vector>
 
 class Game
 {
@@ -31,6 +32,15 @@ private:
 	Vector2 mBallVel;
 	int thickness = 15;
 	Uint32 mTicksCount;
+
+	//multi-ball support
+	struct Ball {
+		Vector2 position;
+		Vector2 velocity;
+	};
+	std::vector<Ball> balls;
+	Ball ball0;
+	Ball ball1;
 
 	//paddle direction
 	int mPaddleDir;

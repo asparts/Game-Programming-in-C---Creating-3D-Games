@@ -20,10 +20,26 @@ Game::Game()
 
 	paddleH = 100.0f;
 
+	
+	
+
 }
 
 bool Game::Initialize()
 {
+	
+
+	ball0.position.x = 1024 / 2;
+	ball0.position.y = 768 / 2;
+	ball0.velocity.x = -100.0f;
+	ball0.velocity.y = -89.0f;
+	ball1.position.x = 1024 / 2;
+	ball1.position.y = 768 / 2;
+	ball1.velocity.x = 100.0f;
+	ball1.velocity.y = -89.0f;
+	balls.push_back(ball0);
+	balls.push_back(ball1);
+
 	//initializing sdl library.
 	int sdlResult = SDL_Init(SDL_INIT_VIDEO); 
 
@@ -177,6 +193,11 @@ void Game::UpdateGame()
 	mBallPos.x += mBallVel.x * deltaTime;
 	mBallPos.y += mBallVel.y * deltaTime;
 
+	//multi-ball
+	ball0.position.x += ball0.velocity.x * deltaTime;
+	ball0.position.y += ball0.velocity.y * deltaTime;
+	ball1.position.x += ball1.velocity.x * deltaTime;
+	ball1.position.y += ball1.velocity.y * deltaTime;
 
 
 	//ball collisions
@@ -197,17 +218,60 @@ void Game::UpdateGame()
 	//	mBallVel.x *= -1;
 	//}
 
+
+	//multi-ball collisions
+	if (ball0.position.y <= thickness && ball0.velocity.y < 0.0f)
+	{
+		ball0.velocity.y *= -1;
+	}
+	//if moving down and colliding with bot wall
+	else if (ball0.position.y >= 768 - thickness && ball0.velocity.y > 0.0f)
+	{
+		ball0.velocity.y *= -1;
+	}
+	if (ball1.position.y <= thickness && ball1.velocity.y < 0.0f)
+	{
+		ball1.velocity.y *= -1;
+	}
+	//if moving down and colliding with bot wall
+	else if (ball1.position.y >= 768 - thickness && ball1.velocity.y > 0.0f)
+	{
+		ball1.velocity.y *= -1;
+	}
+
+
 	//paddle
 	float diff = mBallPos.y - mPaddlePos.y;
 	if (diff <= paddleH / 2.0f && mBallPos.x <= 75.0f && mBallPos.x >= 20.0f && mBallVel.x < 0.0f)
 	{
 		mBallVel.x *= -1.0f;
 	}
+	diff = ball0.position.y - mPaddlePos.y;
+	if (diff <= paddleH / 2.0f && ball0.position.x <= 75.0f && ball0.position.x >= 20.0f && ball0.velocity.x < 0.0f)
+	{
+		ball0.velocity.x *= -1.0f;
+	}
+	diff = ball1.position.y - mPaddlePos.y;
+	if (diff <= paddleH / 2.0f && ball1.position.x <= 75.0f && ball1.position.x >= 20.0f && ball1.velocity.x < 0.0f)
+	{
+		ball1.velocity.x *= -1.0f;
+	}
+
 	//paddle2
 	float diff2 = mPaddle2Pos.y - mBallPos.y;
 	if (diff2 <= paddleH / 2.0f && mBallPos.x > 924.0f && mBallVel.x > 0.0f)
 	{
 		mBallVel.x *= -1.0f;
+	}
+	diff2 = mPaddle2Pos.y - ball0.position.y;
+	if (diff2 <= paddleH / 2.0f && ball0.position.x <= 75.0f && ball0.position.x >= 20.0f && ball0.velocity.x < 0.0f)
+	{
+		ball0.velocity.x *= -1.0f;
+	}
+	diff2 = mPaddle2Pos.y - ball1.position.y;
+	if (diff2 <= paddleH / 2.0f && ball1.position.x <= 75.0f && ball1.position.x >= 20.0f && ball1.velocity.x < 0.0f)
+	{
+		ball1.velocity.x *= -1.0f;
 	}
 }
 
@@ -230,6 +294,22 @@ void Game::GenerateOutput()
 	};
 	SDL_RenderFillRect(mRenderer, &ball);
 	
+	//multi-ball drawing
+	SDL_Rect ball_0{
+		static_cast<int>(ball0.position.x - thickness / 2),
+		static_cast<int>(ball0.position.y - thickness / 2),
+		thickness,
+		thickness
+	};
+	SDL_Rect ball_1{
+		static_cast<int>(ball1.position.x - thickness / 2),
+		static_cast<int>(ball1.position.y - thickness / 2),
+		thickness,
+		thickness
+	};
+	SDL_RenderFillRect(mRenderer, &ball_0);
+	SDL_RenderFillRect(mRenderer, &ball_1);
+
 	//draw paddle
 	SDL_Rect mPaddle{
 		mPaddlePos.x,mPaddlePos.y / 2,thickness,paddleH

@@ -1,6 +1,7 @@
 #include "SpriteComponent.h"
 
-SpriteComponent::SpriteComponent(Actor* owner, int drawOrder)
+SpriteComponent::SpriteComponent(Actor* owner, int drawOrder) 
+	:Component(owner), mTexture(nullptr), mDrawOrder(drawOrder), mTextureWidth(0), mTextureHeight(0)
 {
 }
 
@@ -25,7 +26,7 @@ void SpriteComponent::Draw(SDL_Renderer* renderer)
 			mTexture, //texture to draw 
 			nullptr,  //source rectangle
 			&sdl_rect, //destination rectangle
-			-Math::ToDegrees(mOwner->GetPosition()), //Convert angle
+			-Math::ToDegrees(mOwner->GetRotation()), //Convert angle
 			nullptr, //point of rotation
 			SDL_FLIP_NONE //flip begavior
 		);

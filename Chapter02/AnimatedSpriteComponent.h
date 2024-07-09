@@ -2,7 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "SpriteComponent.h"
-class AnimatedSpriteComponent : SpriteComponent
+class AnimatedSpriteComponent : public SpriteComponent
 {
 public:
 	AnimatedSpriteComponent(class Actor* owner, int drawOrder = 100);

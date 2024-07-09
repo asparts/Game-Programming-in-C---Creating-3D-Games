@@ -1,6 +1,7 @@
 #include "AnimatedSpriteComponent.h"
 
 AnimatedSpriteComponent::AnimatedSpriteComponent(Actor* owner, int drawOrder)
+	:SpriteComponent(owner, drawOrder), mCurrentFrame(0.0f), mAnimationFPS(24.0f)
 {
 }
 

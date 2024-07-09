@@ -1,7 +1,7 @@
 #pragma once
 
-#include <SDL.h>
 #include <vector>
+#include "Math.h"
 /// <summary>
 /// an object in the game (trees, NPCs, buildings, etc. A similar term is "entity".)
 /// </summary>
@@ -38,7 +38,11 @@ public:
 
 	State GetState() { return this->mState; }
 	State SetState(State state) { this->mState = state; }
-	const Vector2& GetPosition() const { return mPosition; }
+	const Vector2& GetPosition() { return mPosition; }
+	float GetScale() const { return mScale; }
+	void SetScale(float scale) { mScale = scale; }
+	float GetRotation() const { return mRotation; }
+	void SetRotation(float rotation) { mRotation = rotation; }
 
 	//Add/remove components
 
@@ -47,11 +51,11 @@ public:
 
 private:
 	
-	/*struct Vector2
-	{
-		float x;
-		float y;
-	};*/
+	//struct Vector2
+	//{
+	//	float x;
+	//	float y;
+	//};
 
 	//Actors state
 	State mState;

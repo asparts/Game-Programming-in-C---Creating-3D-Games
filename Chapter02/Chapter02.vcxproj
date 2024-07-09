@@ -134,7 +134,7 @@
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="AnimatedSpriteComponent.cpp" />
-    <ClCompile Include="BackgroundComponent.cpp" />
+    <ClCompile Include="BackgroundSpriteComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
@@ -143,7 +143,7 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="AnimatedSpriteComponent.h" />
-    <ClInclude Include="BackgroundComponent.h" />
+    <ClInclude Include="BackgroundSpriteComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Math.h" />
